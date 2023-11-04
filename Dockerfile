@@ -1,10 +1,10 @@
-FROM python:3.9.7-slim-buster
+FROM ubuntu:latest
+RUN apt-get update -y && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends git wget pv jq python3-dev ffmpeg mediainfo python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-
-WORKDIR .
-RUN apt -qq update && apt -qq install -y git wget pv jq python3-dev ffmpeg mediainfo
-COPY . .
-RUN pip3 install -r requirements.txt
-RUN apt install ffmpeg
-
-CMD ["python3", "main.py"]
+COPY . /app/
+WORKDIR /app/
+RUN pip3 install --no-cache-dir --upgrade --requirement Installer
+CMD python3 main.py
